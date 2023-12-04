@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Atmos Weather</title>
+    <meta name="description" content="Simple weather app displaying temperature and weather forecasts.">
+    <link rel="stylesheet" href="./style.css">
+    <script defer type="module" src="./src/index.js"></script>
+
+</head>
+<body>
+    <nav id="nav-bar">
+        <h1>Atmos Weather</h1>
+    </nav>
+    <div id="location-search">
+        <!-- <input type="search" id="location" name="location" placeholder="Search for a location..."/> -->
+        <form id="location-search">
+            <input id="location-bar" placeholder="Search for a location..."></input>
+            <br />
+            <button class="form-elements" type="submit" id="location-submit" name="submit" hidden></button>
+        </form>
+
+        <h3>User settings:</h1>
+            <select id="select-temp-unit">
+                <option value="">---Temperature unit---</option>
+                <option value="fahrenheit">Fahrenheit</option>
+                <option value="celsius">Celsius</option>
+            </select>
+            <select id="select-precipitation-unit">
+                <option value="">---Precipitation unit---</option>
+                <option value="mm">Milimeters</option>
+                <option value="inch">Inches</option>
+            </select>
+            <select id="select-speed-unit">
+                <option value="">---Wind speed unit---</option>
+                <option value="kmh">km/h</option>
+                <option value="mph">mph</option>
+                <option value="kn">kn</option>
+            </select>
+
+    </div>
+    <div id="my-locations">
+        <!-- <h1>Location: <span id="location-display"></span></h1>
+        <span class="temperature-display">Temperature</span> -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "locations": [
+    {
+      "location_name": "Brooklyn, NY, USA",
+      "latitude": 40.6781784,
+      "longitude": -73.9441579,
+      "id": 5
+    },
+    {
+      "location_name": "Seattle, WA, USA",
+      "latitude": 47.6061389,
+      "longitude": -122.3328481,
+      "id": 8
+    },
+    {
+      "location_name": "Paris, France",
+      "latitude": 48.856614,
+      "longitude": 2.3522219,
+      "id": 10
+    },
+    {
+      "location_name": "San Francisco, CA, USA",
+      "latitude": 37.7749295,
+      "longitude": -122.4194155,
+      "id": 11
+    }
+  ]
+}

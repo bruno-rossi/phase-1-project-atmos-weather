@@ -1,0 +1,51 @@
+
+body {
+    background: #fff;
+    /* background-image: url("assets/Cloud-background.jpeg"); */
+    /* font-family: "Courier New"; */
+    font-family: sans-serif;
+    text-align: center;
+    width: 80%;
+    margin: auto;
+}
+
+#nav-bar {
+    /* background-color: #fff; */
+}
+
+/* 
+#settings {
+    position: fixed;
+    top: 0;
+    right: 15%;
+} */
+
+.cards {
+    width: 90%;
+    border-radius: 20px;
+    border: 1px solid;
+    margin: auto;
+    margin-top: 1%;
+    padding: 1%;
+}
+
+.cards table {
+    width: 100%;
+}
+
+/* #location-search {
+    /* position: relative;
+    width: 60%;
+    height: 15%;
+    background-color: #fff;
+    border-radius: 20px;
+    margin: auto;
+    padding-bottom: 0px; 
+} */
+
+
+#location-bar {
+    border-radius: 20px;
+    /* width: 50%; */
+    border: 1px solid;
+}

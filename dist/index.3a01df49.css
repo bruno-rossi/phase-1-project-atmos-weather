@@ -1,0 +1,26 @@
+body {
+  text-align: center;
+  background: #fff;
+  width: 80%;
+  margin: auto;
+  font-family: sans-serif;
+}
+
+.cards {
+  border: 1px solid;
+  border-radius: 20px;
+  width: 90%;
+  margin: 1% auto auto;
+  padding: 1%;
+}
+
+.cards table {
+  width: 100%;
+}
+
+#location-bar {
+  border: 1px solid;
+  border-radius: 20px;
+}
+
+/*# sourceMappingURL=index.3a01df49.css.map */
