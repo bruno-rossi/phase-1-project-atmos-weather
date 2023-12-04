@@ -170,44 +170,44 @@ function currentWeatherCondition(weatherData) {
     
     function dayOrNight (){
         if (weatherData.current.is_day === 1) {
-        return "It's daytime!"
+        return "It's daytime!";
     } else {
-        return "It's nighttime!"
+        return "It's nighttime!";
     };}
 
     function clouds() {
         if (weatherData.current.cloud_cover <= 30) {
-            return "Today the sky is clear!"
+            return "Today the sky is clear!";
         } else if (weatherData.current.cloud_cover <= 60) {
-            return "There are a few clouds in the sky..."
+            return "There are a few clouds in the sky...";
         } else if (weatherData.current.cloud_cover <= 90) {
-            return "The sky is mostly cloudy right now..."
+            return "The sky is mostly cloudy right now...";
         } else { 
-            return "Completely overcast"
+            return "Completely overcast";
         };
     } 
 
     function isRaining() {
         if (weatherData.current.rain === 0) {
-            return "No rain"
+            return "No rain";
         } else if (weatherData.current.rain <= 0.5) {
-            return "Light rain"
+            return "Light rain";
         } else if (weatherData.current.rain <= 4.0) {
-            return "Moderate rain"
+            return "Moderate rain";
         } else {
-            return "Heavy Rain"
+            return "Heavy Rain";
         };
     }
 
     function isSnowing() {
         if (weatherData.current.snowfall === 0) {
-            return "It is not snowing"
+            return "It is not snowing";
         } else if (weatherData.current.snowfall <= 0.5) {
-            return "Light snow"
+            return "Light snow";
         } else if (weatherData.current.snowfall <= 4.0) {
-            return "Moderate snow"
+            return "Moderate snow";
         } else {
-            return "Heavy snow"
+            return "Heavy snow";
         };
     }
 
