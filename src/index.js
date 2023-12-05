@@ -1,5 +1,44 @@
+let temperatureUnit = "fahrenheit";
+
+// User settings
+fetch("http://localhost:3000/user_settings")
+.then(response => response.json())
+.then(userSettings => {
+    temperatureUnit = userSettings.temperature_unit;
+    document.querySelector("#select-temp-unit").value = temperatureUnit;
+    console.log(temperatureUnit);
+
+    document.querySelector("#select-temp-unit").addEventListener("change", event => {
+    
+        temperatureUnit = document.querySelector("#select-temp-unit").value;
+        console.log(temperatureUnit);
+        fetch("http://localhost:3000/user_settings/", {
+            method: "PATCH",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({temperature_unit: temperatureUnit})
+        })
+        .then(response => response.json())
+        .then(() => {
+            
+            fetch("http://localhost:3000/locations")
+            .then(response => response.json())
+            .then(locations => {
+    
+            locations.forEach(location => {
+                document.querySelector("table").remove();
+                displayLocationWeather(location);
+            })
+            })
+        })
+    })
+
+})
+
 // Location search bar form functionality
-const locationForm = document.querySelector("#location-search");
+const locationForm = document.querySelector("#location-search-form");
 locationForm.addEventListener("submit", event => {
     event.preventDefault();
 
@@ -54,7 +93,7 @@ function createLocationCard(location) {
     const divTag = document.createElement("div");
     divTag.classList = "cards";
 
-    const h3Tag = document.createElement("h3");
+    const h3Tag = document.createElement("h2");
     h3Tag.textContent = location.location_name;
 
     const h1Tag = document.createElement("h1");
@@ -68,11 +107,20 @@ function createLocationCard(location) {
 
     const removeButton = document.createElement("button");
     removeButton.textContent = "x"
+    removeButton.style.opacity = 0;
 
     displayLocationWeather(location);
 
-    divTag.append(h3Tag, h2Tag, h1Tag, pTag, removeButton);
+    divTag.append(removeButton, h3Tag, h2Tag, h1Tag, pTag);
     document.querySelector("#my-locations").append(divTag);
+    
+    divTag.addEventListener("mouseover", () => {
+        removeButton.style.opacity = 1;
+    })
+
+    divTag.addEventListener("mouseout", () => {
+        removeButton.style.opacity = 0;
+    })
 
     removeButton.addEventListener("click", event => {
         fetch(`http://localhost:3000/locations/${location.id}`, {
@@ -86,9 +134,18 @@ function createLocationCard(location) {
     })
 }
 
+// function getCurrentTime(location) {
+//     fetch(`https://timeapi.io/api/TimeZone/coordinate?latitude=${location.latitude}&longitude=${location.longitude}
+//     `)
+//     .then(response => response.json())
+//     .then(currentTime => {
+//         console.log(currentTime)
+//     })
+// }
+
 function displayLocationWeather(location) {
     
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,is_day,precipitation,rain,showers,snowfall,cloud_cover,wind_speed_10m&hourly=temperature_2m,precipitation_probability,precipitation,rain,showers,snowfall,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=auto`)
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,is_day,rain,snowfall,cloud_cover&hourly=temperature_2m,rain,snowfall,cloud_cover&temperature_unit=${temperatureUnit}&timezone=auto&forecast_days=2`)
     .then(response => response.json())
     .then(locationWeatherData => {
         console.log(locationWeatherData);
@@ -97,9 +154,9 @@ function displayLocationWeather(location) {
 
         // Slice the current.time property starting from index 11 to get time in hh:mm format
         const current_time_formatted = locationWeatherData.current.time.slice([11]);
-        console.log(current_time_formatted);
+        // console.log(current_time_formatted);
 
-        document.getElementById(`current-time-${location.id}`).textContent = `${current_time_formatted}`
+        document.getElementById(`current-time-${location.id}`).textContent = `Time: ${current_time_formatted}`;
 
         document.getElementById(`current-condition-${location.id}`).textContent = `${currentWeatherCondition(locationWeatherData)}`;
 
@@ -125,25 +182,19 @@ function displayLocationWeather(location) {
         
         createHourlyForecastTable(nextSixHours, location);
 
-        currentWeatherCondition(locationWeatherData);
+        currentWeatherCondition(locationWeatherData.current);
     })
 }
-
-// const userProfile = {
-//     temperature_unit: "fahrenheit",
-//     precipitation_unit: "inch",
-//     wind_speed: "kmh"
-// }
-
 
 function createHourlyForecastTable(weatherData, location) {
     
     // Create table for hourly data:
     const tableTag = document.createElement("table");
     const theadTag = document.createElement("thead");
-    const trTag = document.createElement("tr");
+    const trTemperature = document.createElement("tr");
+    const trCondition = document.createElement("tr");
     
-    tableTag.append(theadTag, trTag);
+    tableTag.append(theadTag, trCondition, trTemperature);
 
     // const slicedWeatherDataHours = weatherData.hourly.time.slice(0, 6);
     // const slicedWeatherDataTemperature = weatherData.hourly.temperature_2m.slice(0, 6);
@@ -156,7 +207,11 @@ function createHourlyForecastTable(weatherData, location) {
 
         const tdTagTemperature = document.createElement("td");
         tdTagTemperature.textContent = `${weatherData[i].temperature} ${weatherData[i].temperature_unit}`;
-        trTag.append(tdTagTemperature);
+        trTemperature.append(tdTagTemperature);
+
+        const tdCondition = document.createElement("td");
+        tdCondition.textContent = `${currentWeatherCondition(weatherData[i])}`;
+        trCondition.append(tdCondition);
     }
 
     document.getElementById(`${location.id}`).parentNode.append(tableTag);
@@ -165,50 +220,34 @@ function createHourlyForecastTable(weatherData, location) {
 
 function currentWeatherCondition(weatherData) {
 
-    return `${dayOrNight()}, ${clouds()}, ${isRaining()}, ${isSnowing()}`;
-
+    // return `${dayOrNight()}, ${clouds()}, ${isRaining()}, ${isSnowing()}`;
     
-    function dayOrNight (){
-        if (weatherData.current.is_day === 1) {
-        return "It's daytime!";
-    } else {
-        return "It's nighttime!";
-    };}
+    // function dayOrNight (){
+    //     if (weatherData.current.is_day === 1) {
+    //     return "It's daytime!";
+    // } else {
+    //     return "It's nighttime!";
+    // };}
 
-    function clouds() {
-        if (weatherData.current.cloud_cover <= 30) {
-            return "Today the sky is clear!";
-        } else if (weatherData.current.cloud_cover <= 60) {
-            return "There are a few clouds in the sky...";
-        } else if (weatherData.current.cloud_cover <= 90) {
-            return "The sky is mostly cloudy right now...";
-        } else { 
-            return "Completely overcast";
-        };
-    } 
-
-    function isRaining() {
-        if (weatherData.current.rain === 0) {
-            return "No rain";
-        } else if (weatherData.current.rain <= 0.5) {
-            return "Light rain";
-        } else if (weatherData.current.rain <= 4.0) {
-            return "Moderate rain";
-        } else {
-            return "Heavy Rain";
-        };
-    }
-
-    function isSnowing() {
-        if (weatherData.current.snowfall === 0) {
-            return "It is not snowing";
-        } else if (weatherData.current.snowfall <= 0.5) {
-            return "Light snow";
-        } else if (weatherData.current.snowfall <= 4.0) {
-            return "Moderate snow";
-        } else {
-            return "Heavy snow";
-        };
-    }
-
+    if (weatherData.snowfall > 0 && weatherData.snowfall <= 0.5) {
+        return "Light snow";
+    } else if (weatherData.snowfall > 0.5 && weatherData.snowfall <= 4.0) {
+        return "Moderate snow";
+    } else if (weatherData.snowfall > 4) {
+        return "Heavy snow";
+    } else if (weatherData.rain > 0 && weatherData.snowfall <= 0.5) {
+        return "Light rain";
+    } else if (weatherData.rain > 0.5 && weatherData.rain <= 4.0) {
+        return "Moderate rain";
+    } else if (weatherData.rain > 4) {
+        return "Heavy rain";
+    } else if (weatherData.cloud_cover > 5 && weatherData.cloud_cover <= 20) {
+        return "Clear skies";
+    } else if (weatherData.cloud_cover > 20 && weatherData.cloud_cover <= 60) {
+        return "Cloudy";
+    } else if (weatherData.cloud_cover > 60 && weatherData.cloud_cover <= 100) {
+        return "Overcast";
+    } else { 
+        return "Clear weather";
+    };
 }

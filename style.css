@@ -2,8 +2,7 @@
 body {
     background: #fff;
     /* background-image: url("assets/Cloud-background.jpeg"); */
-    /* font-family: "Courier New"; */
-    font-family: sans-serif;
+    font-family: "Forum";
     text-align: center;
     width: 80%;
     margin: auto;
@@ -11,6 +10,16 @@ body {
 
 #nav-bar {
     /* background-color: #fff; */
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+#nav-bar h1 {
+    /* display: inline-block; */
 }
 
 /* 
@@ -21,31 +30,67 @@ body {
 } */
 
 .cards {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
     width: 90%;
     border-radius: 20px;
-    border: 1px solid;
+    border: 1px dashed;
     margin: auto;
     margin-top: 1%;
     padding: 1%;
+}
+
+.cards h3 {
+    margin: 0%;
+}
+
+.cards h2 {
+    margin: 0%;
+}
+
+.cards h1 {
+    margin: 0%;
+
+}
+
+.cards p {
+    margin: 0%;
+}
+
+.cards button {
+    float: inline-end;
+    width: 2.5%;
+    margin: 0%;
+    border-radius: 20px;
+    border: 1px solid gray;
 }
 
 .cards table {
     width: 100%;
 }
 
-/* #location-search {
-    /* position: relative;
-    width: 60%;
-    height: 15%;
+#location-bar {
+    width: 40%;
     background-color: #fff;
     border-radius: 20px;
     margin: auto;
-    padding-bottom: 0px; 
-} */
-
-
-#location-bar {
+    padding-bottom: 1%; 
     border-radius: 20px;
-    /* width: 50%; */
-    border: 1px solid;
+    border: 1px solid gray;
+    padding: 0.5%;
+    font-family: "Forum";
+
+}
+
+#select-temp-unit {
+    align-self: flex-end;
+    font-family: "Forum";
+    width: 10%;
+    border-radius: 20px;
+    /* margin: auto; */
+    /* padding-bottom: 0px;  */
+    border: 1px solid gray;
+    /* padding: 0.5%; */
 }
