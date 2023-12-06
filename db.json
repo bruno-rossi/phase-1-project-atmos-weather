@@ -7,22 +7,14 @@
       "id": 5
     },
     {
-      "location_name": "Seattle, WA, USA",
-      "latitude": 47.6061389,
-      "longitude": -122.3328481,
-      "id": 8
-    },
-    {
-      "location_name": "Paris, France",
-      "latitude": 48.856614,
-      "longitude": 2.3522219,
-      "id": 10
-    },
-    {
-      "location_name": "San Francisco, CA, USA",
-      "latitude": 37.7749295,
-      "longitude": -122.4194155,
+      "location_name": "Los Angeles, CA, USA",
+      "latitude": 34.0549076,
+      "longitude": -118.242643,
       "id": 11
     }
-  ]
+  ],
+  "user_settings": {
+    "temperature_unit": "celsius",
+    "user_locale": "en"
+  }
 }

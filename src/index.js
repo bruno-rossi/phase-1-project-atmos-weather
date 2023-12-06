@@ -1,13 +1,113 @@
+// Add localization functionality:
+let locale;
+
+const translations = {
+    "en": {
+        "atmos-weather": "Atmos Weather",
+        "search-bar-placeholder": "Search for a location...",
+        "temp-unit-fahrenheit": "Fahrenheit",
+        "temp-unit-celsius": "Celsius",
+        "condition-light-snow": "Light snow",
+        "condition-moderate-snow": "Moderate snow",
+        "condition-heavy-snow": "Heavy snow",
+        "condition-light-rain": "Light rain",
+        "condition-moderate-rain": "Moderate rain",
+        "condition-heavy-rain": "Heavy rain",
+        "condition-clear": "Clear weather",
+        "condition-cloudy": "Cloudy",
+        "condition-overcast": "Overcast",
+        "failed-to-load": "Failed to load",
+        "footer": "Sources: Weather data: https://open-meteo.com/"
+    },
+    "pt-BR": {
+        "atmos-weather": "Atmos Weather",
+        "search-bar-placeholder": "Pesquisar local...",
+        "temp-unit-fahrenheit": "Fahrenheit",
+        "temp-unit-celsius": "Celsius",
+        "condition-light-snow": "Pouca neve",
+        "condition-moderate-snow": "Neve moderada",
+        "condition-heavy-snow": "Neve forte",
+        "condition-light-rain": "Garoa",
+        "condition-moderate-rain": "Chuva leve",
+        "condition-heavy-rain": "Chuva forte",
+        "condition-clear": "Tempo limpo",
+        "condition-cloudy": "Nublado",
+        "condition-overcast": "Tempo fechado",
+        "failed-to-load": "Falha ao carregar dados",
+        "footer": "Fontes: Dados climáticos: https://open-meteo.com/"
+    }
+}
+
 // Initialize temperature unit in case it isn't defined:
-let temperatureUnit = "fahrenheit";
+let temperatureUnit;
 
 // User settings
 fetch("http://localhost:3000/user_settings")
 .then(response => response.json())
 .then(userSettings => {
-    temperatureUnit = userSettings.temperature_unit;
-    document.querySelector("#select-temp-unit").value = temperatureUnit;
     console.log(temperatureUnit);
+
+    console.log(locale);
+    
+    temperatureUnit = userSettings.temperature_unit;
+    document.querySelector("#select-temp-unit").value = temperatureUnit
+
+    locale = userSettings.user_locale;
+    console.log(locale);
+
+    document.querySelector("#locale-switcher").value = userSettings.user_locale;
+
+    console.log(locale);    
+    console.log(temperatureUnit);
+
+    document.querySelectorAll("[data-i18n-key]").forEach(translateString);
+
+    function translateString(string) {
+        
+        const key = string.getAttribute("data-i18n-key");
+        const translation = translations[locale][key];
+        string.textContent = translation;
+
+        document.querySelector("#location-bar").placeholder = translations[locale]["search-bar-placeholder"];
+}
+
+    // Fetch locations from local db and createLocationCard forEach:
+    fetch("http://localhost:3000/locations")
+    .then(response => response.json())
+    .then(locations => {
+
+        locations.forEach(location => {
+            createLocationCard(location);
+        })
+    })
+
+    document.querySelector("#locale-switcher").addEventListener("change", () => {
+        locale = document.querySelector("#locale-switcher").value;
+
+        fetch("http://localhost:3000/user_settings/", {
+            method: "PATCH",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({user_locale: locale})
+        })
+        .then(response => response.json())
+        .then(() => {
+            
+            fetch("http://localhost:3000/locations")
+            .then(response => response.json())
+            .then(locations => {
+            
+            document.querySelectorAll("[data-i18n-key]").forEach(translateString);
+
+            locations.forEach(location => {
+                document.querySelector("table").remove();
+                displayLocationWeather(location);
+            })
+            })
+        })
+    })
 
     document.querySelector("#select-temp-unit").addEventListener("change", () => {
     
@@ -40,6 +140,7 @@ fetch("http://localhost:3000/user_settings")
 
 // Location search bar form functionality:
 const locationForm = document.querySelector("#location-search-form");
+
 locationForm.addEventListener("submit", event => {
     event.preventDefault();
 
@@ -49,7 +150,7 @@ locationForm.addEventListener("submit", event => {
     console.log(addressToSearch);
 
     // Fetch first search result from Google Geocoding API:
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${addressToSearch}&key=${process.env.API_KEY}`)
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${addressToSearch}&language=${locale}&key=${process.env.API_KEY}`)
     .then(response => response.json())
     .then(geolocation => {
         console.log(geolocation);
@@ -77,16 +178,6 @@ locationForm.addEventListener("submit", event => {
     })
 
     event.target.reset();
-})
-
-// Fetch locations from local db and createLocationCard forEach:
-fetch("http://localhost:3000/locations")
-.then(response => response.json())
-.then(locations => {
-
-    locations.forEach(location => {
-        createLocationCard(location);
-    })
 })
 
 function createLocationCard(location) {
@@ -244,31 +335,31 @@ function createHourlyForecastTable(weatherData, location) {
 function currentWeatherCondition(weatherData) {
 
     if (weatherData.snowfall > 0 && weatherData.snowfall <= 0.5) {
-        return [ snow, "Light snow" ];
+        return [ snow, translations[locale]["condition-light-snow"] ];
     } else if (weatherData.snowfall > 0.5 && weatherData.snowfall <= 4.0) {
-        return [ snow, "Moderate snow" ];
+        return [ snow, translations[locale]["condition-moderate-snow"] ];
     } else if (weatherData.snowfall > 4) {
-        return [ snow, "Heavy snow" ];
+        return [ snow, translations[locale]["condition-heavy-snow"] ];
     } else if (weatherData.rain > 0 && weatherData.snowfall <= 0.5) {
-        return [ lightRain, "Light rain" ];
+        return [ lightRain, translations[locale]["condition-light-rain"] ];
     } else if (weatherData.rain > 0.5 && weatherData.rain <= 4.0) {
-        return [ moderateRain, "Moderate rain" ];
+        return [ moderateRain, translations[locale]["condition-moderate-rain"] ];
     } else if (weatherData.rain > 4) {
-        return [ heavyRain, "Heavy rain" ];
+        return [ heavyRain, translations[locale]["condition-heavy-rain"] ];
     } else if (weatherData.cloud_cover > 5 && weatherData.cloud_cover <= 20 && weatherData.is_day === 1) {
-        return [ clearWeatherDay, "Clear weather" ];
+        return [ clearWeatherDay, translations[locale]["condition-clear"] ];
     } else if (weatherData.cloud_cover > 5 && weatherData.cloud_cover <= 20 && weatherData.is_day === 0) {
-        return [ clearWeatherNight, "Clear weather" ];
+        return [ clearWeatherNight, translations[locale]["condition-clear"] ];
     } else if (weatherData.cloud_cover > 20 && weatherData.cloud_cover <= 70) {
-        return [ cloudy, "Cloudy" ];
+        return [ cloudy, translations[locale]["condition-cloudy"] ];
     } else if (weatherData.cloud_cover > 70) {
-        return [ cloudy, "Overcast" ];
+        return [ cloudy, translations[locale]["condition-overcast"] ];
     } else if (weatherData.is_day === 1) { 
-        return [ clearWeatherDay, "Clear weather" ];
+        return [ clearWeatherDay, translations[locale]["condition-clear"] ];
     } else if (weatherData.is_day === 0) {
-        return [ clearWeatherNight, "Clear weather" ];
+        return [ clearWeatherNight, translations[locale]["condition-clear"] ];
     } else {
-        return [ , "Failed to load"];
+        return [ , translations[locale]["failed-to-load"]];
     }
 }
 
@@ -280,4 +371,3 @@ import lightRain from "../assets/lightRain.png";
 import moderateRain from "../assets/moderateRain.png";
 import heavyRain from "../assets/heavyRain.png";
 import cloudy from "../assets/cloudy.png";
-

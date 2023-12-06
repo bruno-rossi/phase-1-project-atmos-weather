@@ -13,13 +13,20 @@ body {
     width: 90%;
     margin: auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
 
 }
 
+#user-preferences {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+}
+
 #nav-bar h1 {
     /* display: inline-block; */
+    width: 100%;
 }
 
 /* 
@@ -91,10 +98,21 @@ body {
 }
 
 #select-temp-unit {
-    align-self: flex-end;
     font-family: "Forum";
-    width: 10%;
+    /* width: 10%; */
     border-radius: 20px;
+    margin: 1%;
+    /* margin: auto; */
+    /* padding-bottom: 0px;  */
+    border: 1px solid gray;
+    /* padding: 0.5%; */
+}
+
+#locale-switcher {
+    font-family: "Forum";
+    /* width: 10%; */
+    border-radius: 20px;
+    margin: 1%;
     /* margin: auto; */
     /* padding-bottom: 0px;  */
     border: 1px solid gray;

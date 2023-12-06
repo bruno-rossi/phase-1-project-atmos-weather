@@ -9,16 +9,22 @@
 </head>
 <body>
     <nav id="nav-bar">
-        <h1>Atmos Weather</h1>
-        <select id="select-temp-unit">
-            <option value="fahrenheit">Fahrenheit</option>
-            <option value="celsius">Celsius</option>
-        </select>
+        <h1 data-i18n-key="atmos-weather" id="atmos-weather">Atmos Weather</h1>
+        <div id="user-preferences"> 
+            <select data-i18n-switcher id="locale-switcher">
+                <option value="en">English</option>
+                <option value="pt-BR">Português (Brasil)</option>
+              </select>
+              <select id="select-temp-unit">
+                <option value="fahrenheit" data-i18n-key="temp-unit-fahrenheit">Fahrenheit</option>
+                <option value="celsius" data-i18n-key="temp-unit-celsius">Celsius</option>
+            </select>
+        </div>
     </nav>
     <div id="location-search">
         <!-- <input type="search" id="location" name="location" placeholder="Search for a location..."/> -->
         <form id="location-search-form">
-            <input id="location-bar" placeholder="Search for a location..."></input>
+            <input id="location-bar"></input>
             <br />
             <button class="form-elements" type="submit" id="location-submit" name="submit" hidden></button>
         </form>
@@ -28,7 +34,7 @@
         <span class="temperature-display">Temperature</span> -->
     </div>
     <footer>
-        <p>Sources:
+        <p data-i18n-key="footer">Sources:
         Weather data: https://open-meteo.com/</p>
     </footer>
 </body>
