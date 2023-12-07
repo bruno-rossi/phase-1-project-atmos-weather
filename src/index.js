@@ -17,7 +17,7 @@ const translations = {
         "condition-cloudy": "Cloudy",
         "condition-overcast": "Overcast",
         "failed-to-load": "Failed to load",
-        "footer": "Sources: Weather data: https://open-meteo.com/"
+        "footer": "Sources: Weather data: Open-Meteo.com | Local time data: WorldTimeAPI.org | Location data: Google Geolocation API"
     },
     "pt-BR": {
         "atmos-weather": "Atmos Weather",
@@ -34,7 +34,7 @@ const translations = {
         "condition-cloudy": "Nublado",
         "condition-overcast": "Tempo fechado",
         "failed-to-load": "Falha ao carregar dados",
-        "footer": "Fontes: Dados climáticos: https://open-meteo.com/"
+        "footer": "Fontes: Dados climáticos: Open-Meteo.com | Hora local: WorldTimeAPI.org | Dados de geolocalização: Google Geolocation API"
     }
 }
 
@@ -259,7 +259,7 @@ function displayLocationWeather(location) {
         document.getElementById(`current-condition-${location.id}`).textContent = `${currentWeatherCondition(locationWeatherData.current)[1]}`;
         document.getElementById(`current-img-${location.id}`).src = `${currentWeatherCondition(locationWeatherData.current)[0]}`;
         document.getElementById(`current-img-${location.id}`).alt = `${currentWeatherCondition(locationWeatherData.current)[1]}`;
-        document.getElementById(`current-img-${location.id}`).style = "width:48px; height:48px;"
+        document.getElementById(`current-img-${location.id}`).style = "width:96px; height:96px;"
 
         // Slice the current time from the weather API call, search for it in the array of hourly data, and get its index:
         const indexOfFirstHourly = locationWeatherData.hourly.time.indexOf(`${locationWeatherData.current.time.slice(0, 14)}` + `00`);
@@ -320,7 +320,7 @@ function createHourlyForecastTable(weatherData, location) {
 
         const tdImage = document.createElement("td");
         const imgInTable = document.createElement("img");
-        imgInTable.style = "width:48px; height:48px;"
+        imgInTable.style = "width:72; height:72px;"
         imgInTable.src = `${currentWeatherCondition(weatherData[i])[0]}`;
         imgInTable.alt = `${currentWeatherCondition(weatherData[i])[1]}`;
         tdImage.append(imgInTable);
@@ -371,3 +371,5 @@ import lightRain from "../assets/lightRain.png";
 import moderateRain from "../assets/moderateRain.png";
 import heavyRain from "../assets/heavyRain.png";
 import cloudy from "../assets/cloudy.png";
+
+

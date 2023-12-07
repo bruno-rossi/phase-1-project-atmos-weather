@@ -4,17 +4,11 @@
       "location_name": "Brooklyn, NY, USA",
       "latitude": 40.6781784,
       "longitude": -73.9441579,
-      "id": 5
-    },
-    {
-      "location_name": "Los Angeles, CA, USA",
-      "latitude": 34.0549076,
-      "longitude": -118.242643,
-      "id": 11
+      "id": 1
     }
   ],
   "user_settings": {
-    "temperature_unit": "celsius",
+    "temperature_unit": "fahrenheit",
     "user_locale": "en"
   }
 }
